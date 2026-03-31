@@ -70,7 +70,6 @@ Books and journals may be lent to friends with reservation system. The system sh
 **Tech stack**
 
 Database: `PostgreSQL`
-TODO: confirm with Magda
 
 Application backend: `Python Flask`
 
