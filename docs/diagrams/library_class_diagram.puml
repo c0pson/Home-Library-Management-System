@@ -1,0 +1,136 @@
+@startuml Class Diagram
+
+!theme plain
+skinparam ClassAttributeIconSize 0
+skinparam BackgroundColor #FAFAFA
+skinparam RoundCorner 20
+skinparam class {
+  BorderColor #16342c
+  BackgroundColor #edfdf8
+  HeaderBackgroundColor #6aa8b8
+  ArrowColor #24768b
+}
+
+title Home Library Management System — Class Diagram
+
+enum LendingStatus {
+  Reserved
+  Lent
+  Returned
+  Cancelled
+  Overdue
+}
+
+enum InboxMessageType {
+  LendingRequest
+  ReservationConfirmed
+  ReturnReminder
+  FriendRequest
+  SystemNotification
+}
+
+class User {
+  -user_id: int
+  -username: string <<unique>>
+  -password_hash: string
+  --
+  +register(): void
+  +login(): bool
+  +searchBooks(query: string): List<Book>
+  +listBooks(): List<Book>
+  +addBook(book: Book): Book
+  +removeBook(book: Book): void
+  +sendLendingRequest(book: Book, friend: User): InboxMessage
+  +viewInbox(): List<InboxMessage>
+  .. Getters and Setters ..
+}
+
+class Friendship {
+  -friendship_id: int
+  -user_id: int
+  -friend_id: int
+  -since: date
+  .. Getters and Setters ..
+}
+
+class Book {
+  -book_id: int
+  -title: string
+  -author: string
+  -release_date: date
+  -language: string
+  -genre: string
+  -isbn_13: string
+  -isbn_10: string
+  --
+  +getDetails(): string
+  .. Getters and Setters ..
+}
+
+class BookCollection {
+  -collection_id: int
+  -user_id: int
+  -book_id: int
+  -added_at: timestamp
+  -condition: string
+  --
+  +updateCondition(newCondition: string): void
+  .. Getters and Setters ..
+}
+
+class Lending {
+  -lending_id: int
+  -borrowing_user_id: int
+  -book_id: int
+  -reservation_date: date
+  -lent_date: date
+  -return_date: date
+  -status: LendingStatus
+  --
+  +reserve(): InboxMessage
+  +confirmLend(): InboxMessage
+  +confirmReturn(): InboxMessage
+  +cancel(): InboxMessage
+  .. Getters and Setters ..
+}
+
+class InboxMessage {
+  -message_id: int
+  -recipient_id: int
+  -type: InboxMessageType
+  -content: string
+  -sent_at: timestamp
+  -read: bool
+  --
+  +markAsRead(): void
+  .. Getters and Setters ..
+}
+
+'/ relationships based on the database diagram '/
+User "1" -- "0..*" Friendship : "user_id" >
+User "1" -- "0..*" Friendship : "friend_id" >
+
+User "1" -- "0..*" BookCollection : "owns" >
+Book "1" -- "0..*" BookCollection : "belongs to" >
+
+BookCollection "1" -- "0..*" Lending : "referenced by book_id" >
+User "1" -- "0..*" Lending : "referenced by borrowing_user_id" >
+
+User "1" -- "0..*" InboxMessage : receives >
+
+User ..> InboxMessage : "<<creates>>"
+Lending ..> InboxMessage : "<<creates>>"
+
+note bottom of Lending
+  Borrowing user must
+  be a friend of
+  lending user
+end note
+
+note as N1
+  All classes contain 
+  Getters and Setters
+  as needed
+end note
+
+@enduml

@@ -1,0 +1,104 @@
+@startuml Use Case Diagram
+
+!theme plain
+skinparam BackgroundColor #fafafa
+skinparam RoundCorner 20
+skinparam usecase {
+  BorderColor #16342c
+  BackgroundColor #edfdf8
+  ArrowColor #24768b
+  roundcorner 100
+}
+skinparam actor {
+  BorderColor #16342c
+  BackgroundColor #edfdf8
+}
+
+title Home Library Management System — Use Case Diagram For One User
+
+top to bottom direction
+
+actor "Registered\nLogged in User" as User
+
+rectangle "Home Library Management System" {
+
+  package "Account Management" {
+    usecase "Delete account" as UC_DeleteAcc
+    usecase "Manage Friend Connections" as UC_Friends
+    usecase "Send Friend Request" as UC_FriendReq
+    usecase "Accept / Decline Friend Request" as UC_FriendReqRec
+    usecase "Delete Friend" as UC_FriendDel
+
+    UC_Friends ..> UC_FriendReq : <<extend>>
+    UC_Friends ..> UC_FriendReqRec : <<extend>>
+    UC_Friends ..> UC_FriendDel : <<extend>>
+  }
+
+  package "Book Collection" {
+    usecase "Add Book to Collection" as UC_AddBook
+    usecase "Select Book from Global List" as UC_SelGlobalBook
+    usecase "Create Book from scratch" as UC_CreateBook
+    usecase "Remove Book from Collection" as UC_RemoveBook
+    usecase "View Own Collection" as UC_ViewOwn
+    usecase "Search Global Collection" as UC_Search
+    usecase "Sort Search Results" as UC_Sort
+
+    UC_SelGlobalBook ..> UC_Search : <<include>>
+    UC_Search ..> UC_Sort : <<extend>>
+    UC_AddBook ..> UC_SelGlobalBook : <<include>>
+    UC_AddBook ..> UC_CreateBook : <<include>>
+    UC_RemoveBook ..> UC_ViewOwn : <<include>>
+
+    note bottom of UC_CreateBook : Created Book is added to the Global List of all books
+  }
+
+  package "Lending & Reservation" {
+    usecase "Reserve a Book" as UC_Reserve
+    usecase "Cancel Reservation" as UC_Cancel
+    usecase "Accept / Decline Lending Request" as UC_LendResponse
+    usecase "Borrow a Book from a Friend" as UC_Borrow
+    usecase "Return a Book" as UC_Return
+    usecase "Confirm Book Return" as UC_ReturnConf
+    usecase "View Lending History" as UC_History
+
+    UC_Cancel ..> UC_Reserve : <<include>>
+    UC_Cancel ..> UC_LendResponse : <<include>>
+    UC_ReturnConf ..> UC_LendResponse : <<include>>
+    UC_Borrow ..> UC_Reserve : <<include>>
+    UC_Return ..> UC_Borrow : <<include>>
+
+    note bottom of UC_LendResponse : Borrower must be\na confirmed friend of\nthe owner
+  }
+
+  package "Inbox" {
+    usecase "View Inbox Notifications" as UC_Inbox
+    usecase "Mark Message as Read" as UC_MarkRead
+    usecase "Receive Notification" as UC_Notif
+    usecase "Receive Reminder" as UC_Reminder
+
+    UC_Inbox ..> UC_MarkRead : <<extend>>
+    UC_Inbox ..> UC_Notif : <<extend>>
+    UC_Inbox ..> UC_Reminder : <<extend>>
+  }
+
+  UC_Reserve -[hidden]right- UC_DeleteAcc
+  UC_DeleteAcc -[hidden]right- UC_Inbox
+  UC_DeleteAcc -[hidden]right- UC_AddBook 
+
+  User --> UC_DeleteAcc
+  User --> UC_Friends
+  User --> UC_AddBook
+  User --> UC_RemoveBook
+  
+  User --> UC_Reserve
+  User --> UC_LendResponse
+  User --> UC_Borrow
+  User --> UC_Return
+  User --> UC_ReturnConf
+  User --> UC_Cancel
+  User --> UC_History
+  User --> UC_Inbox
+  
+}
+
+@enduml
