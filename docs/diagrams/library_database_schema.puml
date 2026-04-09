@@ -1,0 +1,112 @@
+@startuml Database Schema
+
+!theme plain
+skinparam BackgroundColor #FAFAFA
+skinparam RoundCorner 20
+skinparam class {
+  BorderColor #16342c
+  BackgroundColor #edfdf8
+  HeaderBackgroundColor #6aa8b8
+  ArrowColor #24768b
+  FontSize 12
+}
+skinparam linetype ortho
+
+title Home Library Management System — Database Schema (PostgreSQL)
+
+/' * denotes obligatory fields, cannot be null '/
+/' Most TEXT fields' ranges can be changed down the line'/
+
+entity "users" as users {
+  * user_id : INTEGER GENERATED ALWAYS AS IDENTITY <<PK>>
+  --
+  * username : TEXT <<UNIQUE, NOT NULL, 3-50 chars>>
+  * password_hash : TEXT <<NOT NULL, max 123 chars>> /'In case of sha512crypt'/
+}
+
+entity "friends" as friends {
+  * friendship_id : INTEGER GENERATED ALWAYS AS IDENTITY <<PK>>
+  --
+  * user_id : INTEGER <<FK → users.user_id, NOT NULL>>
+  * friend_id : INTEGER <<FK → users.user_id, NOT NULL>>
+  * since : DATE <<DEFAULT CURRENT_DATE>>
+  --
+  <<UNIQUE (user_id, friend_id)>>
+}
+
+entity "books" as books {
+  * book_id : INTEGER GENERATED ALWAYS AS IDENTITY <<PK>>
+  --
+  * title : TEXT <<NOT NULL, 1-255 chars>> /'Not unique'/
+  * author : TEXT <<NOT NULL, 3-255 chars>>
+  release_date : DATE
+  language : TEXT <<3-50 chars>>
+  genre : TEXT <<3-100 chars>>
+  /'Each of numbers below can be NULL, a book does not have to be described with any to be a valid book'/
+  /'VARCHAR used, because those numbers are a set standard and will not change'/
+  isbn_13 : VARCHAR(13) /'Not unique, exceptions occur'/
+  isbn_10 : VARCHAR(10) /'Old format 1970-2007'/
+}
+
+entity "book_collection" as collection {
+  * collection_id : INTEGER GENERATED ALWAYS AS IDENTITY <<PK>>
+  --
+  * user_id : INTEGER <<FK → users.user_id, NOT NULL>>
+  * book_id : INTEGER <<FK → books.book_id, NOT NULL>>
+  * added_at : TIMESTAMP <<DEFAULT CURRENT_TIMESTAMP>>
+  * condition : TEXT <<CHECK: new|good|fair|poor, 3-4 chars>>
+}
+
+entity "lendings" as lendings {
+  * lending_id : INTEGER GENERATED ALWAYS AS IDENTITY <<PK>>
+  --
+  * borrowing_user_id : INTEGER  <<FK → users.user_id, NOT NULL>>
+  * book_id : INTEGER  <<FK → collection.collection_id, NOT NULL>>
+  * reservation_date : DATE <<NOT NULL>>
+  lent_date : DATE
+  return_date : DATE
+  * status : TEXT <<NOT NULL, CHECK: reserved|lent|returned|cancelled|overdue, 4-9 chars>>
+}
+
+entity "inbox_messages" as inbox {
+  * message_id : INTEGER GENERATED ALWAYS AS IDENTITY <<PK>>
+  --
+  * recipient_id : INTEGER  <<FK → users.user_id, NOT NULL>>
+  * type : TEXT <<NOT NULL, max 50 chars>>
+  * content : TEXT <<NOT NULL, max 255 chars>>
+  * sent_at : TIMESTAMP <<DEFAULT CURRENT_TIMESTAMP>>
+  * read : BOOLEAN <<DEFAULT FALSE>>
+}
+
+inbox -[hidden]right friends
+users ||--o{ friends : "user_id"
+users ||--o{ friends : "friend_id"
+users ||--o{ collection : "owns"
+books ||--o{ collection : "belongs to"
+users ||--o{ lendings : "borrows (borrowing_user_id)"
+collection ||--o{ lendings : "referenced by"
+users ||--o{ inbox : "receives"
+
+note bottom of lendings
+  borrowing_user_id must reference
+  a confirmed friend of lending user id
+  derived from book_collection user_id
+end note
+
+note bottom of books 
+  ISBN codes do not have
+  to be unique and can be NULL
+end note
+
+note bottom of collection
+  Users can have more than one
+  identical book
+end note
+
+note bottom of friends
+  Friendship is directional.
+  Mutual friendship requires
+  two rows: (A→B) and (B→A)
+end note
+
+@enduml

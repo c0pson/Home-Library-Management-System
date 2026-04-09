@@ -1,0 +1,61 @@
+@startuml state Diagram
+
+!theme plain
+skinparam BackgroundColor #fafafa
+skinparam RoundCorner 20
+skinparam state {
+  BorderColor #16342c
+  BackgroundColor #edfdf8
+  ArrowColor #24768b
+}
+
+title Home Library Management System — Book State Diagram
+
+[*] --> Available : Book added to user's collection\nand possibly to global list of books
+
+Available : Owner holds the book
+Available : Can be found in global search
+
+Available --> Reserved : Friend requests reservation\n[friend connection verified]
+
+Reserved : Date for reservation and return recorded
+Reserved : Inbox notification sent to owner
+
+note right of Reserved
+  Triggers InboxMessage
+  of type LendingRequest to owner
+end note
+
+Reserved --> Lent : Owner confirms lending\nand the user borrows on the lending date
+Reserved --> Available : Reservation cancelled\n[by borrower or owner]
+Reserved --> Available : Reservation expired\n[no confirmation]
+
+Lent : Book is with borrower
+Lent : Return date set as previously
+
+Lent --> ReturnPending : Borrower initiates return
+Lent --> Overdue : Return date exceeded\n[reminder sent to inbox]
+
+ReturnPending : Owner must confirm the return
+
+note right of ReturnPending
+  Triggers InboxMessage
+  of type ReturnRequest to owner
+end note
+
+ReturnPending --> Available : Owner confirms return
+
+Overdue : Return reminder notification sent\nboth to borrower and to owner
+Overdue : Book still with borrower
+
+note right of Overdue
+  Triggers InboxMessage
+  of type ReturnReminder
+  to borrower and owner
+end note
+
+Overdue --> ReturnPending : Borrower initiates return
+
+Available --> [*] : Book removed from collection\nStays in the global list of books
+
+@enduml
