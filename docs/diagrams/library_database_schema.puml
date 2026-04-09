@@ -1,4 +1,5 @@
-@startuml
+@startuml Database Schema
+
 !theme plain
 skinparam BackgroundColor #FAFAFA
 skinparam RoundCorner 20
@@ -12,7 +13,6 @@ skinparam class {
 skinparam linetype ortho
 
 title Home Library Management System — Database Schema (PostgreSQL)
-
 
 /' * denotes obligatory fields, cannot be null '/
 /' Most TEXT fields' ranges can be changed down the line'/
@@ -108,7 +108,5 @@ note bottom of friends
   Mutual friendship requires
   two rows: (A→B) and (B→A)
 end note
-
-
 
 @enduml

@@ -1,4 +1,5 @@
-@startuml
+@startuml Use Case Diagram
+
 !theme plain
 skinparam BackgroundColor #fafafa
 skinparam RoundCorner 20
@@ -83,7 +84,6 @@ rectangle "Home Library Management System" {
   UC_Reserve -[hidden]right- UC_DeleteAcc
   UC_DeleteAcc -[hidden]right- UC_Inbox
   UC_DeleteAcc -[hidden]right- UC_AddBook 
-  
 
   User --> UC_DeleteAcc
   User --> UC_Friends
@@ -100,4 +100,5 @@ rectangle "Home Library Management System" {
   User --> UC_Inbox
   
 }
+
 @enduml

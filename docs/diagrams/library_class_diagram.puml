@@ -1,4 +1,5 @@
-@startuml
+@startuml Class Diagram
+
 !theme plain
 skinparam ClassAttributeIconSize 0
 skinparam BackgroundColor #FAFAFA

@@ -1,4 +1,5 @@
-@startuml
+@startuml state Diagram
+
 !theme plain
 skinparam BackgroundColor #fafafa
 skinparam RoundCorner 20
