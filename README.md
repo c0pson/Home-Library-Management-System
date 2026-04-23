@@ -18,6 +18,92 @@ Project for managing personal books collections with lending and reservation fea
 - **Testing:** `Pytest`
 - **Tools:** `GitHub, Docker`
 
+### Project structure
+
+```
+project-root/
+│
+├── database/
+│   ├── schema/
+│   │   ├── create_tables.sql
+│   │   ├── drop_tables.sql
+│   │   └── indexes.sql
+│   ├── functions/
+│   │   └── procedures.sql
+│   └── setup.py
+│
+├── app/
+│   ├── config/
+│   │   └── config.py
+│   │
+│   ├── database/
+│   │   ├── connection.py
+│   │   ├── models/
+│   │   │   ├── user.py
+│   │   │   ├── book.py
+│   │   │   ├── lending.py
+│   │   │   └── inbox.py
+│   │   └── repositories/
+│   │       ├── user_repo.py
+│   │       ├── book_repo.py
+│   │       ├── lending_repo.py
+│   │       └── inbox_repo.py
+│   │
+│   ├── api/
+│   │   ├── routes/
+│   │   │   ├── user_routes.py
+│   │   │   ├── book_routes.py
+│   │   │   ├── lending_routes.py
+│   │   │   └── inbox_routes.py
+│   │   └── schemas/
+│   │       ├── user_schema.py
+│   │       ├── book_schema.py
+│   │       ├── lending_schema.py
+│   │       └── inbox_schema.py
+│   │
+│   ├── services/
+│   │   ├── user_service.py
+│   │   ├── book_service.py
+│   │   ├── lending_service.py
+│   │   └── inbox_service.py
+│   │
+│   ├── utils/
+│   │   └── security.py
+│   │
+│   ├── templates/              # Jinja2 HTML templates
+│   │   ├── base.html
+│   │   ├── login.html
+│   │   ├── dashboard.html
+│   │   ├── books.html
+│   │   ├── lending.html
+│   │   └── inbox.html
+│   │
+│   ├── static/                 # CSS, JS, assets
+│   │   ├── css/
+│   │   ├── js/
+│   │   └── img/
+│   │
+│   └── __init__.py
+│
+├── tests/
+│   ├── unit/
+│   ├── integration/
+│   └── conftest.py
+│
+├── docker/
+│   ├── Dockerfile
+│   └── docker-compose.yml
+│
+├── docs/
+│   └── README.md
+│
+├── main.py
+├── requirements.txt
+├── .gitignore
+├── LICENSE
+└── README.md
+```
+
 ### Documentation
 
  - [Initial System Requirements Specification](docs/Initial_System_Requirements_Specification.md)
