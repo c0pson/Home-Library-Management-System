@@ -104,6 +104,23 @@ project-root/
 └── README.md
 ```
 
+### Running with Docker
+
+Start Docker Desktop, then from the project root:
+
+```bash
+# Build and start
+docker compose -f docker/compose.yaml up --build
+
+# Stop (data kept)
+docker compose -f docker/compose.yaml down
+
+# Stop and wipe database
+docker compose -f docker/compose.yaml down -v
+```
+
+Backend runs at `http://localhost:8000`.
+
 ### Documentation
 
  - [Initial System Requirements Specification](docs/Initial_System_Requirements_Specification.md)
