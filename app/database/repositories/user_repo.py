@@ -1,0 +1,7 @@
+"""
+User repository, data access layer.
+
+Contains all SQL queries related to the 'users' related tables.
+Returns Book model instances. No business logic,
+just CRUD and search queries against PostgreSQL.
+"""
