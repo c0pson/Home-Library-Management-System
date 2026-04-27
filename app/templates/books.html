@@ -1,0 +1,34 @@
+{% extends "base.html" %}
+{% block title %}All Books{% endblock %}
+{% block content %}
+<h1>All Books</h1>
+
+<form method="GET">
+    <input type="text" name="q" value="{{ search }}" placeholder="Search by title or author">
+    <select name="sort">
+        <option value="title"        {% if sort_by == 'title' %}selected{% endif %}>Title</option>
+        <option value="author"       {% if sort_by == 'author' %}selected{% endif %}>Author</option>
+        <option value="genre"        {% if sort_by == 'genre' %}selected{% endif %}>Genre</option>
+        <option value="language"     {% if sort_by == 'language' %}selected{% endif %}>Language</option>
+        <option value="release_date" {% if sort_by == 'release_date' %}selected{% endif %}>Year</option>
+    </select>
+    <button type="submit">Search</button>
+</form>
+
+<p><a href="{{ url_for('books.add') }}">+ Add a new book</a> | <a href="{{ url_for('books.browse') }}">Browse books available for borrowing</a></p>
+
+<table border="1">
+    <tr><th>Title</th><th>Author</th><th>Genre</th><th>Language</th><th>Release date</th></tr>
+    {% for book in books %}
+    <tr>
+        <td>{{ book.title }}</td>
+        <td>{{ book.author }}</td>
+        <td>{{ book.genre or '—' }}</td>
+        <td>{{ book.language or '—' }}</td>
+        <td>{{ book.release_date or '—' }}</td>
+    </tr>
+    {% else %}
+    <tr><td colspan="5">No books found.</td></tr>
+    {% endfor %}
+</table>
+{% endblock %}

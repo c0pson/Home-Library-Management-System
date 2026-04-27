@@ -1,0 +1,45 @@
+{% extends "base.html" %}
+{% block title %}Dashboard{% endblock %}
+{% block content %}
+<h1>Dashboard</h1>
+<p>Welcome, <strong>{{ session.username }}</strong>!</p>
+
+<ul>
+    <li>Books in my collection: {{ collection | length }}</li>
+    <li>My active lendings: {{ lendings | length }}</li>
+    <li>Incoming lending requests: {{ incoming | length }}</li>
+    <li>Unread messages: {{ unread }}</li>
+</ul>
+
+<p>
+    <a href="{{ url_for('books.add') }}">Add a book</a> |
+    <a href="{{ url_for('books.browse') }}">Borrow a book</a> |
+    <a href="{{ url_for('lending.index') }}">Manage lending</a> |
+    <a href="{{ url_for('inbox.index') }}">View inbox{% if unread %} ({{ unread }}){% endif %}</a>
+</p>
+
+{% if incoming %}
+<h2>Pending lending requests for my books</h2>
+<table border="1">
+    <tr><th>Book</th><th>Requested by</th><th>Date</th><th>Status</th><th>Actions</th></tr>
+    {% for r in incoming %}
+    <tr>
+        <td>{{ r.title }} — {{ r.author }}</td>
+        <td>{{ r.borrower_username }}</td>
+        <td>{{ r.reservation_date }}</td>
+        <td>{{ r.status }}</td>
+        <td>
+            {% if r.status == 'Reserved' %}
+            <form method="POST" action="{{ url_for('lending.confirm', lending_id=r.lending_id) }}" style="display:inline">
+                <button type="submit">Accept</button>
+            </form>
+            <form method="POST" action="{{ url_for('lending.decline', lending_id=r.lending_id) }}" style="display:inline">
+                <button type="submit">Decline</button>
+            </form>
+            {% endif %}
+        </td>
+    </tr>
+    {% endfor %}
+</table>
+{% endif %}
+{% endblock %}

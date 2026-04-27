@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>{% block title %}Library{% endblock %} - Home Library</title>
+</head>
+<body>
+
+{% if session.user_id %}
+<nav>
+    <a href="{{ url_for('home.dashboard') }}">Dashboard</a> |
+    <a href="{{ url_for('books.index') }}">All Books</a> |
+    <a href="{{ url_for('books.browse') }}">Borrow</a> |
+    <a href="{{ url_for('books.collection') }}">My Collection</a> |
+    <a href="{{ url_for('lending.index') }}">Lending</a> |
+    <a href="{{ url_for('inbox.index') }}">Inbox</a> |
+    <a href="{{ url_for('user.friends') }}">Friends</a> |
+    <strong>{{ session.username }}</strong> |
+    <a href="{{ url_for('user.logout') }}">Logout</a>
+</nav>
+<hr>
+{% endif %}
+
+{% block content %}{% endblock %}
+
+</body>
+</html>
