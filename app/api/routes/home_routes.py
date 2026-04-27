@@ -4,13 +4,11 @@ from app.utils.security import login_required
 
 home = Blueprint("home", __name__)
 
-
 @home.route("/")
 def index():
     if "user_id" in session:
         return redirect(url_for("home.dashboard"))
     return redirect(url_for("user.login"))
-
 
 @home.route("/dashboard")
 @login_required

@@ -1,7 +1,5 @@
 from dataclasses import dataclass
 from datetime import datetime
-from typing import Optional
-
 
 @dataclass
 class Lending:
@@ -9,6 +7,6 @@ class Lending:
     borrowing_user_id: int
     book_id: int
     status: str
-    reservation_date: Optional[datetime] = None
-    lent_date: Optional[datetime] = None
-    return_date: Optional[datetime] = None
+    reservation_date: datetime | None = None
+    lent_date: datetime | None = None
+    return_date: datetime | None = None

@@ -6,7 +6,6 @@ from app.utils.security import login_required
 
 books = Blueprint("books", __name__, url_prefix="/books")
 
-
 @books.route("/")
 @login_required
 def index():
@@ -14,7 +13,6 @@ def index():
     sort_by = request.args.get("sort", "title")
     all_books = book_service.get_all_books(search=search, sort_by=sort_by)
     return render_template("books.html", books=all_books, search=search, sort_by=sort_by)
-
 
 @books.route("/browse")
 @login_required
@@ -24,7 +22,6 @@ def browse():
     user_id = session["user_id"]
     available = [b for b in available if b["user_id"] != user_id]
     return render_template("browse.html", available=available)
-
 
 @books.route("/add", methods=["GET", "POST"])
 @login_required
@@ -41,13 +38,11 @@ def add():
             return redirect(url_for("books.collection"))
     return render_template("book_add.html", errors=errors, data=data)
 
-
 @books.route("/collection")
 @login_required
 def collection():
     items = book_service.get_user_collection(session["user_id"])
     return render_template("collection.html", items=items)
-
 
 @books.route("/collection/remove/<int:collection_id>", methods=["POST"])
 @login_required

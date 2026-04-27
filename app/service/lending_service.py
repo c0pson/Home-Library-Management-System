@@ -1,20 +1,15 @@
-from typing import List, Optional, Tuple
-
 from app.database.repositories import book_repo, inbox_repo, lending_repo
 from app.database.models.lending import Lending
 
-
-def get_user_lendings(user_id: int) -> List[dict]:
+def get_user_lendings(user_id: int) -> list[dict]:
     return lending_repo.get_for_user(user_id)
 
-
-def get_incoming_requests(user_id: int) -> List[dict]:
+def get_incoming_requests(user_id: int) -> list[dict]:
     return lending_repo.get_incoming_requests(user_id)
-
 
 def reserve_book(
     borrowing_user_id: int, collection_id: int
-) -> Tuple[Optional[Lending], Optional[str]]:
+) -> tuple[Lending | None, str | None]:
     item = book_repo.get_collection_item(collection_id)
     if not item:
         return None, "Book not found in collection."
@@ -34,10 +29,9 @@ def reserve_book(
     )
     return lending, None
 
-
 def confirm_lending(
     lending_id: int, owner_user_id: int
-) -> Tuple[bool, Optional[str]]:
+) -> tuple[bool, str | None]:
     lending = lending_repo.get_by_id(lending_id)
     if not lending or lending.status != "Reserved":
         return False, "Invalid lending request."
@@ -49,10 +43,9 @@ def confirm_lending(
     )
     return True, None
 
-
 def decline_lending(
     lending_id: int, owner_user_id: int
-) -> Tuple[bool, Optional[str]]:
+) -> tuple[bool, str | None]:
     lending = lending_repo.get_by_id(lending_id)
     if not lending or lending.status != "Reserved":
         return False, "Invalid lending request."
@@ -64,10 +57,9 @@ def decline_lending(
     )
     return True, None
 
-
 def request_return(
     lending_id: int, borrower_user_id: int
-) -> Tuple[bool, Optional[str]]:
+) -> tuple[bool, str | None]:
     lending = lending_repo.get_by_id(lending_id)
     if not lending or lending.status != "Lent":
         return False, "No active lending found."

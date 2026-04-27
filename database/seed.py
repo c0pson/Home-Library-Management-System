@@ -24,15 +24,16 @@ GENRES = [
     "Fiction", "Non-Fiction", "Science Fiction", "Fantasy",
     "Mystery", "Thriller", "Romance", "Biography", "History", "Science",
 ]
-LANGUAGES  = ["English", "Polish", "German", "French", "Spanish"]
-CONDITIONS = ["New", "Good", "Fair", "Poor"]
+LANGUAGES  = [
+    "English", "Polish", "German", "French", "Spanish"
+]
+CONDITIONS = [
+    "New", "Good", "Fair", "Poor"
+]
 MSG_TYPES  = [
     "LendingRequest", "LendingAccepted", "LendingDeclined",
     "ReturnRequest", "ReturnConfirmed", "ReturnReminder",
 ]
-
-
-# ---------- seeders ----------
 
 def seed_users(conn, count: int = 10) -> list[dict]:
     users = []
@@ -49,13 +50,12 @@ def seed_users(conn, count: int = 10) -> list[dict]:
     print(f"  users         : {len(users)}")
     return users
 
-
 def seed_books(conn, count: int = 30) -> list[dict]:
     books = []
     with conn.cursor() as cur:
         for _ in range(count):
-            isbn13 = fake.numerify("9780#########")   # 13 chars
-            isbn10 = fake.numerify("##########")       # 10 chars
+            isbn13 = fake.numerify("9780#########")
+            isbn10 = fake.numerify("##########")
             cur.execute(
                 """
                 INSERT INTO books (title, author, release_date, language, genre, isbn_13, isbn_10)
@@ -77,7 +77,6 @@ def seed_books(conn, count: int = 30) -> list[dict]:
     print(f"  books         : {len(books)}")
     return books
 
-
 def seed_collection(conn, users: list, books: list) -> list[int]:
     ids = []
     with conn.cursor() as cur:
@@ -95,7 +94,6 @@ def seed_collection(conn, users: list, books: list) -> list[int]:
                     conn.rollback()
     print(f"  collection    : {len(ids)}")
     return ids
-
 
 def seed_friendships(conn, users: list) -> int:
     count = 0
@@ -119,7 +117,6 @@ def seed_friendships(conn, users: list) -> int:
                     conn.rollback()
     print(f"  friendships   : {count}")
     return count
-
 
 def seed_lendings(conn, users: list, books: list, count: int = 20) -> int:
     created = 0
@@ -154,7 +151,6 @@ def seed_lendings(conn, users: list, books: list, count: int = 20) -> int:
     print(f"  lendings      : {created}")
     return created
 
-
 def seed_inbox(conn, users: list) -> int:
     count = 0
     with conn.cursor() as cur:
@@ -180,11 +176,8 @@ def seed_inbox(conn, users: list) -> int:
     print(f"  inbox messages: {count}")
     return count
 
-
-# ---------- main ----------
-
 def main():
-    print("Seeding database …")
+    print("Seeding database...")
     conn = get_connection()
     try:
         users = seed_users(conn, count=10)
@@ -196,7 +189,6 @@ def main():
         print("Done. All seeded users have password: password123")
     finally:
         conn.close()
-
 
 if __name__ == "__main__":
     main()

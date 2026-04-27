@@ -5,7 +5,6 @@ from app.utils.security import login_required
 
 lending = Blueprint("lending", __name__, url_prefix="/lending")
 
-
 @lending.route("/")
 @login_required
 def index():
@@ -14,13 +13,11 @@ def index():
     incoming = lending_service.get_incoming_requests(user_id)
     return render_template("lending.html", my_lendings=my_lendings, incoming=incoming)
 
-
 @lending.route("/reserve/<int:collection_id>", methods=["POST"])
 @login_required
 def reserve(collection_id):
     lending_service.reserve_book(session["user_id"], collection_id)
     return redirect(url_for("books.browse"))
-
 
 @lending.route("/confirm/<int:lending_id>", methods=["POST"])
 @login_required
@@ -28,13 +25,11 @@ def confirm(lending_id):
     lending_service.confirm_lending(lending_id, session["user_id"])
     return redirect(url_for("lending.index"))
 
-
 @lending.route("/decline/<int:lending_id>", methods=["POST"])
 @login_required
 def decline(lending_id):
     lending_service.decline_lending(lending_id, session["user_id"])
     return redirect(url_for("lending.index"))
-
 
 @lending.route("/return/<int:lending_id>", methods=["POST"])
 @login_required

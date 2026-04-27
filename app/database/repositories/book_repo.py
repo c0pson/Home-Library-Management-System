@@ -1,12 +1,9 @@
-from typing import List, Optional
-
 from app.database.connection import db_cursor
 from app.database.models.book import Book, BookCollection
 
 _SORTABLE = {"title", "author", "genre", "language", "release_date"}
 
-
-def get_all(search: str = None, sort_by: str = "title") -> List[Book]:
+def get_all(search: str | None=None, sort_by: str = "title") -> list[Book]:
     col = sort_by if sort_by in _SORTABLE else "title"
     with db_cursor() as (_, cur):
         if search:
@@ -19,13 +16,11 @@ def get_all(search: str = None, sort_by: str = "title") -> List[Book]:
         rows = cur.fetchall()
     return [Book(**r) for r in rows]
 
-
-def get_by_id(book_id: int) -> Optional[Book]:
+def get_by_id(book_id: int) -> Book | None:
     with db_cursor() as (_, cur):
         cur.execute("SELECT * FROM books WHERE book_id = %s", (book_id,))
         row = cur.fetchone()
     return Book(**row) if row else None
-
 
 def create(title: str, author: str, **kwargs) -> Book:
     with db_cursor() as (_, cur):
@@ -47,8 +42,7 @@ def create(title: str, author: str, **kwargs) -> Book:
         row = cur.fetchone()
     return Book(**row)
 
-
-def get_collection(user_id: int) -> List[dict]:
+def get_collection(user_id: int) -> list[dict]:
     with db_cursor() as (_, cur):
         cur.execute(
             """
@@ -63,8 +57,7 @@ def get_collection(user_id: int) -> List[dict]:
         )
         return [dict(r) for r in cur.fetchall()]
 
-
-def get_collection_item(collection_id: int) -> Optional[dict]:
+def get_collection_item(collection_id: int) -> dict | None:
     with db_cursor() as (_, cur):
         cur.execute(
             """
@@ -79,8 +72,7 @@ def get_collection_item(collection_id: int) -> Optional[dict]:
         row = cur.fetchone()
     return dict(row) if row else None
 
-
-def add_to_collection(user_id: int, book_id: int, condition: str = None) -> BookCollection:
+def add_to_collection(user_id: int, book_id: int, condition: str | None=None) -> BookCollection:
     with db_cursor() as (_, cur):
         cur.execute(
             "INSERT INTO book_collection (user_id, book_id, condition) VALUES (%s, %s, %s) RETURNING *",
@@ -89,7 +81,6 @@ def add_to_collection(user_id: int, book_id: int, condition: str = None) -> Book
         row = cur.fetchone()
     return BookCollection(**row)
 
-
 def remove_from_collection(collection_id: int, user_id: int) -> None:
     with db_cursor() as (_, cur):
         cur.execute(
@@ -97,8 +88,7 @@ def remove_from_collection(collection_id: int, user_id: int) -> None:
             (collection_id, user_id),
         )
 
-
-def get_available_books() -> List[dict]:
+def get_available_books() -> list[dict]:
     """All collection entries whose books are not currently Reserved or Lent."""
     with db_cursor() as (_, cur):
         cur.execute(

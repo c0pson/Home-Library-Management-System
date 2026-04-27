@@ -6,7 +6,6 @@ from app.utils.security import login_required
 
 user = Blueprint("user", __name__)
 
-
 @user.route("/login", methods=["GET", "POST"])
 def login():
     if "user_id" in session:
@@ -22,7 +21,6 @@ def login():
                 session["username"] = u.username
                 return redirect(url_for("home.dashboard"))
     return render_template("login.html", errors=errors, error=error, data=data)
-
 
 @user.route("/register", methods=["GET", "POST"])
 def register():
@@ -40,12 +38,10 @@ def register():
                 return redirect(url_for("home.dashboard"))
     return render_template("register.html", errors=errors, error=error, data=data)
 
-
 @user.route("/logout")
 def logout():
     session.clear()
     return redirect(url_for("user.login"))
-
 
 @user.route("/friends")
 @login_required
@@ -64,13 +60,11 @@ def friends():
         query=query,
     )
 
-
 @user.route("/friends/add/<int:friend_id>", methods=["POST"])
 @login_required
 def add_friend(friend_id):
     user_service.add_friend(session["user_id"], friend_id)
     return redirect(url_for("user.friends"))
-
 
 @user.route("/friends/remove/<int:friend_id>", methods=["POST"])
 @login_required

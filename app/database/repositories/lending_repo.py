@@ -1,17 +1,13 @@
-from typing import List, Optional
-
 from app.database.connection import db_cursor
 from app.database.models.lending import Lending
 
-
-def get_by_id(lending_id: int) -> Optional[Lending]:
+def get_by_id(lending_id: int) -> Lending | None:
     with db_cursor() as (_, cur):
         cur.execute("SELECT * FROM lendings WHERE lending_id = %s", (lending_id,))
         row = cur.fetchone()
     return Lending(**row) if row else None
 
-
-def get_for_book(book_id: int, status: str = None) -> List[Lending]:
+def get_for_book(book_id: int, status: str | None=None) -> list[Lending]:
     with db_cursor() as (_, cur):
         if status:
             cur.execute(
@@ -23,8 +19,7 @@ def get_for_book(book_id: int, status: str = None) -> List[Lending]:
         rows = cur.fetchall()
     return [Lending(**r) for r in rows]
 
-
-def get_for_user(user_id: int) -> List[dict]:
+def get_for_user(user_id: int) -> list[dict]:
     with db_cursor() as (_, cur):
         cur.execute(
             """
@@ -40,8 +35,7 @@ def get_for_user(user_id: int) -> List[dict]:
         )
         return [dict(r) for r in cur.fetchall()]
 
-
-def get_incoming_requests(owner_user_id: int) -> List[dict]:
+def get_incoming_requests(owner_user_id: int) -> list[dict]:
     """Lending requests for books owned by this user."""
     with db_cursor() as (_, cur):
         cur.execute(
@@ -58,7 +52,6 @@ def get_incoming_requests(owner_user_id: int) -> List[dict]:
         )
         return [dict(r) for r in cur.fetchall()]
 
-
 def create_reservation(borrowing_user_id: int, book_id: int) -> Lending:
     with db_cursor() as (_, cur):
         cur.execute(
@@ -71,7 +64,6 @@ def create_reservation(borrowing_user_id: int, book_id: int) -> Lending:
         )
         row = cur.fetchone()
     return Lending(**row)
-
 
 def update_status(lending_id: int, status: str) -> None:
     with db_cursor() as (_, cur):

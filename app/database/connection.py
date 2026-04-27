@@ -5,7 +5,6 @@ from psycopg2.extras import RealDictCursor
 
 from app.config.config import Config
 
-
 def get_connection():
     return psycopg2.connect(
         host=Config.DB_HOST,
@@ -15,7 +14,6 @@ def get_connection():
         password=Config.DB_PASSWORD,
         cursor_factory=RealDictCursor,
     )
-
 
 @contextmanager
 def db_cursor():

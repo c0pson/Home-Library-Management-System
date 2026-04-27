@@ -6,7 +6,7 @@ def validate_register(data: dict) -> dict:
     if not username:
         errors["username"] = "Username is required."
     elif len(username) < 3 or len(username) > 50:
-        errors["username"] = "Username must be 3–50 characters."
+        errors["username"] = "Username must be 3-50 characters."
 
     if not password:
         errors["password"] = "Password is required."
@@ -14,7 +14,6 @@ def validate_register(data: dict) -> dict:
         errors["password"] = "Password must be at least 6 characters."
 
     return errors
-
 
 def validate_login(data: dict) -> dict:
     errors = {}

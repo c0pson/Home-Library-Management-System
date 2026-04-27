@@ -1,6 +1,5 @@
 import os
 
-
 class Config:
     DB_HOST     = os.getenv("DB_HOST", "localhost")
     DB_PORT     = int(os.getenv("DB_PORT", "5432"))

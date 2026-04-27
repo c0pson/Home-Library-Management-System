@@ -1,7 +1,5 @@
 from dataclasses import dataclass
 from datetime import datetime
-from typing import Optional
-
 
 @dataclass
 class InboxMessage:
@@ -9,5 +7,5 @@ class InboxMessage:
     recipient_id: int
     type: str
     content: str
-    sent_at: Optional[datetime] = None
+    sent_at: datetime | None = None
     read: bool = False

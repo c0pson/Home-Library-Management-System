@@ -18,7 +18,6 @@ SCRIPTS = [
     os.path.join(BASE, "functions", "procedures.sql"),
 ]
 
-
 def run():
     conn = get_connection()
     try:
@@ -37,7 +36,6 @@ def run():
         sys.exit(1)
     finally:
         conn.close()
-
 
 if __name__ == "__main__":
     run()

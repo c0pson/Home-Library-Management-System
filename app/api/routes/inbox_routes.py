@@ -5,13 +5,11 @@ from app.utils.security import login_required
 
 inbox = Blueprint("inbox", __name__, url_prefix="/inbox")
 
-
 @inbox.route("/")
 @login_required
 def index():
     messages = inbox_service.get_inbox(session["user_id"])
     return render_template("inbox.html", messages=messages)
-
 
 @inbox.route("/<int:message_id>/read", methods=["POST"])
 @login_required
