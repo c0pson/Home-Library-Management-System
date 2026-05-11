@@ -1,0 +1,35 @@
+services:
+  backend_test:
+    build:
+      context: ..
+      dockerfile: docker/Dockerfile
+    command: pytest
+    environment:
+      FLASK_ENV: testing
+      DB_HOST: db_test
+      DB_PORT: "5432"
+      DB_NAME: test_library
+      DB_USER: test_library_user
+      DB_PASSWORD: test_library_password
+    ports:
+      - "8000:8000"
+    volumes:
+      - ../:/app
+    depends_on:
+      db_test:
+        condition: service_healthy
+
+  db_test:
+    image: postgres:16-alpine
+    environment:
+      PYTHONPATH: .
+      POSTGRES_DB: test_library
+      POSTGRES_USER: test_library_user
+      POSTGRES_PASSWORD: test_library_password
+    volumes:
+      - ../database/schema/create_tables.sql:/docker-entrypoint-initdb.d/01_create_tables.sql:ro
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U test_library_user -d test_library"]
+      interval: 3s
+      timeout: 3s
+      retries: 5
