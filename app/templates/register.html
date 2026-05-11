@@ -1,25 +1,25 @@
 {% extends "base.html" %}
 {% block title %}Register{% endblock %}
+{% block styles %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/auth.css') }}">
+{% endblock %}
 {% block content %}
-<h1>Register</h1>
-
-{% if error %}<p><strong>{{ error }}</strong></p>{% endif %}
-
-<form method="POST">
-    <p>
-        <label>Username<br>
+<div class="auth-card">
+    <h1>Register</h1>
+    {% if error %}<p><strong>{{ error }}</strong></p>{% endif %}
+    <form method="POST">
+        <div class="form-group">
+            <label>Username</label>
             <input type="text" name="username" value="{{ data.username if data else '' }}">
-        </label>
-        {% if errors.username %}<br><span>{{ errors.username }}</span>{% endif %}
-    </p>
-    <p>
-        <label>Password<br>
+            {% if errors.username %}<span>{{ errors.username }}</span>{% endif %}
+        </div>
+        <div class="form-group">
+            <label>Password</label>
             <input type="password" name="password">
-        </label>
-        {% if errors.password %}<br><span>{{ errors.password }}</span>{% endif %}
-    </p>
-    <button type="submit">Register</button>
-</form>
-
-<p><a href="{{ url_for('user.login') }}">Already have an account? Login</a></p>
+            {% if errors.password %}<span>{{ errors.password }}</span>{% endif %}
+        </div>
+        <button type="submit">Register</button>
+    </form>
+    <p><a href="{{ url_for('user.login') }}">Already have an account? Login</a></p>
+</div>
 {% endblock %}
