@@ -1,27 +1,35 @@
 {% extends "base.html" %}
 {% block title %}My Collection{% endblock %}
+{% block styles %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/collection.css') }}">
+{% endblock %}
 {% block content %}
-<h1>My Collection</h1>
-
-<p><a href="{{ url_for('books.add') }}">+ Add a book</a></p>
-
-<table border="1">
-    <tr><th>Title</th><th>Author</th><th>Genre</th><th>Condition</th><th>Added</th><th>Actions</th></tr>
-    {% for item in items %}
-    <tr>
-        <td>{{ item.title }}</td>
-        <td>{{ item.author }}</td>
-        <td>{{ item.genre or '—' }}</td>
-        <td>{{ item.condition or '—' }}</td>
-        <td>{{ item.added_at }}</td>
-        <td>
-            <form method="POST" action="{{ url_for('books.remove_from_collection', collection_id=item.collection_id) }}">
-                <button type="submit">Remove</button>
-            </form>
-        </td>
-    </tr>
-    {% else %}
-    <tr><td colspan="6">Your collection is empty.</td></tr>
-    {% endfor %}
-</table>
+<div class="page-header">
+    <div>
+        <h1>My Collection</h1>
+        <p class="collection-notice">Manage your owned books and remove items from your collection here.</p>
+    </div>
+</div>
+<div class="table-card">
+    <table class="table-reset">
+        <tr><th>Title</th><th>Author</th><th>Genre</th><th>Condition</th><th>Added</th><th>Actions</th></tr>
+        {% for item in items %}
+        <tr>
+            <td>{{ item.title }}</td>
+            <td>{{ item.author }}</td>
+            <td>{{ item.genre or '—' }}</td>
+            <td>{{ item.condition or '—' }}</td>
+            <td>{{ item.added_at }}</td>
+            <td>
+                <form method="POST" action="{{ url_for('books.remove_from_collection', collection_id=item.collection_id) }}">
+                    <button type="submit">Remove</button>
+                </form>
+            </td>
+        </tr>
+        {% else %}
+        <tr><td colspan="6">Your collection is empty.</td></tr>
+        {% endfor %}
+    </table>
+</div>
+<a class="fab" href="{{ url_for('books.add') }}" aria-label="Add book"><span class="material-symbols-outlined">add</span></a>
 {% endblock %}

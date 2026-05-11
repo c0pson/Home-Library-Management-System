@@ -1,9 +1,16 @@
 {% extends "base.html" %}
 {% block title %}All Books{% endblock %}
+{% block styles %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/books.css') }}">
+{% endblock %}
 {% block content %}
-<h1>All Books</h1>
-
-<form method="GET">
+<div class="page-header">
+    <div>
+        <h1>All Books</h1>
+        <p class="page-description">Browse your library and filter by title or author.</p>
+    </div>
+</div>
+<form class="search-bar" method="GET">
     <input type="text" name="q" value="{{ search }}" placeholder="Search by title or author">
     <select name="sort">
         <option value="title"        {% if sort_by == 'title' %}selected{% endif %}>Title</option>
@@ -14,21 +21,21 @@
     </select>
     <button type="submit">Search</button>
 </form>
-
-<p><a href="{{ url_for('books.add') }}">+ Add a new book</a> | <a href="{{ url_for('books.browse') }}">Browse books available for borrowing</a></p>
-
-<table border="1">
-    <tr><th>Title</th><th>Author</th><th>Genre</th><th>Language</th><th>Release date</th></tr>
-    {% for book in books %}
-    <tr>
-        <td>{{ book.title }}</td>
-        <td>{{ book.author }}</td>
-        <td>{{ book.genre or '—' }}</td>
-        <td>{{ book.language or '—' }}</td>
-        <td>{{ book.release_date or '—' }}</td>
-    </tr>
-    {% else %}
-    <tr><td colspan="5">No books found.</td></tr>
-    {% endfor %}
-</table>
+<div class="table-card">
+    <table class="table-reset">
+        <tr><th>Title</th><th>Author</th><th>Genre</th><th>Language</th><th>Release date</th></tr>
+        {% for book in books %}
+        <tr>
+            <td>{{ book.title }}</td>
+            <td>{{ book.author }}</td>
+            <td>{{ book.genre or '—' }}</td>
+            <td>{{ book.language or '—' }}</td>
+            <td>{{ book.release_date or '—' }}</td>
+        </tr>
+        {% else %}
+        <tr><td colspan="5">No books found.</td></tr>
+        {% endfor %}
+    </table>
+</div>
+<a class="fab" href="{{ url_for('books.add') }}" aria-label="Add book"><span class="material-symbols-outlined">add</span></a>
 {% endblock %}

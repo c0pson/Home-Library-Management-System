@@ -1,25 +1,38 @@
 {% extends "base.html" %}
 {% block title %}Borrow a Book{% endblock %}
+{% block styles %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/browse.css') }}">
+{% endblock %}
 {% block content %}
-<h1>Books Available for Borrowing</h1>
-
-<table border="1">
-    <tr><th>Title</th><th>Author</th><th>Genre</th><th>Owner</th><th>Condition</th><th>Action</th></tr>
-    {% for item in available %}
-    <tr>
-        <td>{{ item.title }}</td>
-        <td>{{ item.author }}</td>
-        <td>{{ item.genre or '—' }}</td>
-        <td>{{ item.owner_username }}</td>
-        <td>{{ item.condition or '—' }}</td>
-        <td>
-            <form method="POST" action="{{ url_for('lending.reserve', collection_id=item.collection_id) }}">
-                <button type="submit">Reserve</button>
-            </form>
-        </td>
-    </tr>
-    {% else %}
-    <tr><td colspan="6">No books available for borrowing right now.</td></tr>
-    {% endfor %}
-</table>
+<div class="page-header">
+    <div>
+        <h1>Borrow a Book</h1>
+        <p class="page-description">Search for available books from other users' collections.</p>
+    </div>
+</div>
+<form class="search-bar" method="GET">
+    <input type="text" name="q" value="{{ search }}" placeholder="Search by title or author">
+    <button type="submit">Search</button>
+</form>
+<div class="table-card">
+    <table class="table-reset">
+        <tr><th>Title</th><th>Author</th><th>Genre</th><th>Owner</th><th>Condition</th><th>Action</th></tr>
+        {% for item in available %}
+        <tr>
+            <td>{{ item.title }}</td>
+            <td>{{ item.author }}</td>
+            <td>{{ item.genre or '—' }}</td>
+            <td>{{ item.owner_username }}</td>
+            <td>{{ item.condition or '—' }}</td>
+            <td>
+                <form method="POST" action="{{ url_for('lending.reserve', collection_id=item.collection_id) }}">
+                    <button type="submit" class="reserve-button">Reserve</button>
+                </form>
+            </td>
+        </tr>
+        {% else %}
+        <tr><td colspan="6">No books available for borrowing right now.</td></tr>
+        {% endfor %}
+    </table>
+</div>
 {% endblock %}

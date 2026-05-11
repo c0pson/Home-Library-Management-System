@@ -1,50 +1,46 @@
 {% extends "base.html" %}
 {% block title %}Add Book{% endblock %}
+{% block styles %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/book_add.css') }}">
+{% endblock %}
 {% block content %}
-<h1>Add a Book</h1>
-
-<form method="POST">
-    <p>
-        <label>Title *<br>
+<div class="auth-card">
+    <h1>Add a Book</h1>
+    <form method="POST" class="form-grid">
+        <div>
+            <label>Title *</label>
             <input type="text" name="title" value="{{ data.title if data else '' }}">
-        </label>
-        {% if errors.title %}<br><span>{{ errors.title }}</span>{% endif %}
-    </p>
-    <p>
-        <label>Author *<br>
+            {% if errors.title %}<span>{{ errors.title }}</span>{% endif %}
+        </div>
+        <div>
+            <label>Author *</label>
             <input type="text" name="author" value="{{ data.author if data else '' }}">
-        </label>
-        {% if errors.author %}<br><span>{{ errors.author }}</span>{% endif %}
-    </p>
-    <p>
-        <label>Genre<br>
+            {% if errors.author %}<span>{{ errors.author }}</span>{% endif %}
+        </div>
+        <div>
+            <label>Genre</label>
             <input type="text" name="genre" value="{{ data.genre if data else '' }}">
-        </label>
-    </p>
-    <p>
-        <label>Language<br>
+        </div>
+        <div>
+            <label>Language</label>
             <input type="text" name="language" value="{{ data.language if data else '' }}">
-        </label>
-    </p>
-    <p>
-        <label>Release date<br>
+        </div>
+        <div>
+            <label>Release date</label>
             <input type="date" name="release_date" value="{{ data.release_date if data else '' }}">
-        </label>
-    </p>
-    <p>
-        <label>ISBN-13<br>
+        </div>
+        <div>
+            <label>ISBN-13</label>
             <input type="text" name="isbn_13" maxlength="13" value="{{ data.isbn_13 if data else '' }}">
-        </label>
-        {% if errors.isbn_13 %}<br><span>{{ errors.isbn_13 }}</span>{% endif %}
-    </p>
-    <p>
-        <label>ISBN-10<br>
+            {% if errors.isbn_13 %}<span>{{ errors.isbn_13 }}</span>{% endif %}
+        </div>
+        <div>
+            <label>ISBN-10</label>
             <input type="text" name="isbn_10" maxlength="10" value="{{ data.isbn_10 if data else '' }}">
-        </label>
-        {% if errors.isbn_10 %}<br><span>{{ errors.isbn_10 }}</span>{% endif %}
-    </p>
-    <p>
-        <label>Condition<br>
+            {% if errors.isbn_10 %}<span>{{ errors.isbn_10 }}</span>{% endif %}
+        </div>
+        <div>
+            <label>Condition</label>
             <select name="condition">
                 <option value="">— select —</option>
                 <option value="New">New</option>
@@ -52,10 +48,11 @@
                 <option value="Fair">Fair</option>
                 <option value="Poor">Poor</option>
             </select>
-        </label>
-    </p>
-    <button type="submit">Add to my collection</button>
-</form>
-
-<p><a href="{{ url_for('books.collection') }}">Back to my collection</a></p>
+        </div>
+        <div class="submit-group">
+            <button type="submit">Add to my collection</button>
+        </div>
+    </form>
+    <p><a href="{{ url_for('books.collection') }}">Back to my collection</a></p>
+</div>
 {% endblock %}
