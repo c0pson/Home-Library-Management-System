@@ -1,0 +1,22 @@
+.page-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 18px;
+    margin-bottom: 22px;
+}
+
+.collection-notice {
+    color: var(--muted);
+    margin-top: 4px;
+}
+
+.table-reset td button {
+    background: transparent;
+    color: var(--accent);
+    border: 1px solid var(--border);
+}
+
+.table-reset td button:hover {
+    background: var(--accent-soft);
+}

@@ -1,0 +1,23 @@
+.page-header {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 16px;
+    align-items: flex-end;
+    margin-bottom: 22px;
+}
+
+.search-bar {
+    display: grid;
+    grid-template-columns: minmax(220px, 1fr) 140px;
+    gap: 12px;
+    align-items: center;
+    margin-bottom: 24px;
+}
+
+.reserve-button {
+    background: var(--success);
+}
+
+.table-reset td button {
+    background: var(--accent);
+}

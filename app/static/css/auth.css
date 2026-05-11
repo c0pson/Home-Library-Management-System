@@ -1,0 +1,33 @@
+.auth-card {
+    max-width: 520px;
+    margin: 0 auto;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 26px;
+    box-shadow: var(--shadow);
+    padding: 32px 32px 28px;
+}
+
+.auth-card h1 {
+    margin-top: 0;
+    font-size: clamp(1.8rem, 2vw, 2.2rem);
+}
+
+.auth-card form {
+    display: grid;
+    gap: 16px;
+    margin-top: 18px;
+}
+
+.auth-card p {
+    color: var(--muted);
+}
+
+.auth-card button {
+    width: 100%;
+}
+
+.auth-card a {
+    display: inline-block;
+    margin-top: 12px;
+}

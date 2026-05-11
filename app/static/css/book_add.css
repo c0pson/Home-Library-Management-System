@@ -1,0 +1,39 @@
+.page-content form {
+    max-width: 720px;
+    margin: 0 auto;
+}
+
+.form-grid {
+    display: grid;
+    gap: 16px;
+}
+
+.form-grid p {
+    margin: 0;
+}
+
+.form-grid label {
+    display: block;
+    font-weight: 600;
+    margin-bottom: 8px;
+}
+
+.form-grid input,
+.form-grid select {
+    width: 100%;
+}
+
+.form-grid span {
+    color: var(--danger);
+    font-size: 0.95rem;
+}
+
+.submit-group {
+    margin-top: 10px;
+    display: flex;
+    justify-content: flex-start;
+}
+
+.submit-group button {
+    min-width: 160px;
+}
