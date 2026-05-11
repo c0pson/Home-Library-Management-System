@@ -1,0 +1,14 @@
+.app-shell {
+    grid-template-columns: 1fr;
+}
+
+.page-content {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.auth-card {
+    max-width: 520px;
+}
+
