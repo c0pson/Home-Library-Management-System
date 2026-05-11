@@ -6,7 +6,9 @@ and starts the development server.
 """
 
 from app import create_app
+import database.seed as seed
 
+seed.main()
 app = create_app()
 
 if __name__ == "__main__":

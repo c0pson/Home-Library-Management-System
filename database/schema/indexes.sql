@@ -1,0 +1,13 @@
+CREATE INDEX IF NOT EXISTS idx_users_username        ON users(username);
+CREATE INDEX IF NOT EXISTS idx_friends_user_id        ON friends(user_id);
+CREATE INDEX IF NOT EXISTS idx_friends_friend_id      ON friends(friend_id);
+CREATE INDEX IF NOT EXISTS idx_books_title            ON books(title);
+CREATE INDEX IF NOT EXISTS idx_books_author           ON books(author);
+CREATE INDEX IF NOT EXISTS idx_books_genre            ON books(genre);
+CREATE INDEX IF NOT EXISTS idx_collection_user_id     ON book_collection(user_id);
+CREATE INDEX IF NOT EXISTS idx_collection_book_id     ON book_collection(book_id);
+CREATE INDEX IF NOT EXISTS idx_lendings_borrower      ON lendings(borrowing_user_id);
+CREATE INDEX IF NOT EXISTS idx_lendings_book_id       ON lendings(book_id);
+CREATE INDEX IF NOT EXISTS idx_lendings_status        ON lendings(status);
+CREATE INDEX IF NOT EXISTS idx_inbox_recipient_id     ON inbox_messages(recipient_id);
+CREATE INDEX IF NOT EXISTS idx_inbox_read             ON inbox_messages(read);
