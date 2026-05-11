@@ -23,13 +23,11 @@ def get_for_user(user_id: int) -> list[dict]:
     with db_cursor() as (_, cur):
         cur.execute(
             """
-            SELECT l.*, b.title, b.author, u.username AS owner_username
+            SELECT DISTINCT ON (l.lending_id) l.*, b.title, b.author
             FROM lendings l
             JOIN books b ON l.book_id = b.book_id
-            LEFT JOIN book_collection bc ON bc.book_id = l.book_id
-            LEFT JOIN users u ON bc.user_id = u.user_id
             WHERE l.borrowing_user_id = %s
-            ORDER BY l.reservation_date DESC
+            ORDER BY l.lending_id, l.reservation_date DESC
             """,
             (user_id,),
         )
@@ -40,13 +38,13 @@ def get_incoming_requests(owner_user_id: int) -> list[dict]:
     with db_cursor() as (_, cur):
         cur.execute(
             """
-            SELECT l.*, b.title, b.author, u.username AS borrower_username
+            SELECT DISTINCT ON (l.lending_id) l.*, b.title, b.author, u.username AS borrower_username
             FROM lendings l
             JOIN books b ON l.book_id = b.book_id
             JOIN book_collection bc ON bc.book_id = l.book_id AND bc.user_id = %s
             JOIN users u ON l.borrowing_user_id = u.user_id
             WHERE l.status IN ('Reserved', 'Lent')
-            ORDER BY l.reservation_date DESC
+            ORDER BY l.lending_id, l.reservation_date DESC
             """,
             (owner_user_id,),
         )

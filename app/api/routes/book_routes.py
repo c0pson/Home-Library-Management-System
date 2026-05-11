@@ -18,10 +18,14 @@ def index():
 @login_required
 def browse():
     """Books available for borrowing from other users' collections."""
+    search = request.args.get("q", "").strip()
     available = book_service.get_available_books()
     user_id = session["user_id"]
     available = [b for b in available if b["user_id"] != user_id]
-    return render_template("browse.html", available=available)
+    if search:
+        search_lower = search.lower()
+        available = [b for b in available if search_lower in b["title"].lower() or search_lower in b["author"].lower()]
+    return render_template("browse.html", available=available, search=search)
 
 @books.route("/add", methods=["GET", "POST"])
 @login_required
