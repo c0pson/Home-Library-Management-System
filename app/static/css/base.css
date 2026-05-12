@@ -52,6 +52,16 @@ body.contrast-high {
     --muted: #475569;
 }
 
+body.theme-dark.contrast-high {
+    --background: #050814;
+    --surface: #0f172a;
+    --surface-alt: #141f3b;
+    --surface-strong: #1f2937;
+    --border: rgba(148, 163, 184, 0.32);
+    --text: #f5f9ff;
+    --muted: #cdd9e5;
+}
+
 body.size-small { font-size: 14px; }
 body.size-medium { font-size: 16px; }
 body.size-large { font-size: 18px; }
