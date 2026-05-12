@@ -1,0 +1,34 @@
+.lending-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 22px;
+    align-items: start;
+    margin-bottom: 22px;
+}
+
+.section-card {
+    margin-bottom: 0;
+}
+
+.lending-table {
+    overflow-x: auto;
+}
+
+.status-pill.paid {
+    background: rgba(56, 189, 248, 0.18);
+    color: #0284c7;
+}
+
+.status-pill.lent {
+    background: rgba(16, 185, 129, 0.18);
+    color: #047857;
+}
+
+.status-pill.pending {
+    background: rgba(251, 191, 36, 0.18);
+    color: #b45309;
+}
+
+.table-reset td button {
+    min-width: 100px;
+}

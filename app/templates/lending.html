@@ -1,0 +1,70 @@
+{% extends "base.html" %}
+{% block title %}Lending{% endblock %}
+{% block styles %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/lending.css') }}">
+{% endblock %}
+{% block content %}
+<div class="page-header">
+    <div>
+        <h1>Lending</h1>
+        <p class="page-description">Track your borrowed books and handle incoming reservation requests.</p>
+    </div>
+</div>
+<div class="lending-grid">
+    <div class="section-card lending-table">
+        <h2>My Borrowed Books</h2>
+        <table class="table-reset">
+        <tr><th>Title</th><th>Author</th><th>Reserved</th><th>Lent</th><th>Status</th><th>Actions</th></tr>
+        {% for l in my_lendings %}
+        <tr>
+            <td>{{ l.title }}</td>
+            <td>{{ l.author }}</td>
+            <td>{{ l.reservation_date }}</td>
+            <td>{{ l.lent_date or '—' }}</td>
+            <td>
+                <span class="status-pill {% if l.status == 'Lent' %}lent{% elif l.status == 'Reserved' %}pending{% else %}paid{% endif %}">{{ l.status }}</span>
+            </td>
+            <td>
+                {% if l.status == 'Lent' %}
+                <form method="POST" action="{{ url_for('lending.return_book', lending_id=l.lending_id) }}">
+                    <button type="submit">Return</button>
+                </form>
+                {% endif %}
+            </td>
+        </tr>
+        {% else %}
+        <tr><td colspan="6">No lending history.</td></tr>
+        {% endfor %}
+    </table>
+    </div>
+    <div class="section-card lending-table">
+        <h2>Requests for My Books</h2>
+        <table class="table-reset">
+        <tr><th>Title</th><th>Author</th><th>Requested by</th><th>Date</th><th>Status</th><th>Actions</th></tr>
+        {% for r in incoming %}
+        <tr>
+            <td>{{ r.title }}</td>
+            <td>{{ r.author }}</td>
+            <td>{{ r.borrower_username }}</td>
+            <td>{{ r.reservation_date }}</td>
+            <td>
+                <span class="status-pill {% if r.status == 'Reserved' %}pending{% elif r.status == 'Lent' %}lent{% else %}paid{% endif %}">{{ r.status }}</span>
+            </td>
+            <td>
+                {% if r.status == 'Reserved' %}
+                <form method="POST" action="{{ url_for('lending.confirm', lending_id=r.lending_id) }}" style="display:inline">
+                    <button type="submit">Accept</button>
+                </form>
+                <form method="POST" action="{{ url_for('lending.decline', lending_id=r.lending_id) }}" style="display:inline">
+                    <button type="submit">Decline</button>
+                </form>
+                {% endif %}
+            </td>
+        </tr>
+        {% else %}
+        <tr><td colspan="6">No incoming requests.</td></tr>
+        {% endfor %}
+    </table>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,62 @@
+{% extends "base.html" %}
+{% block title %}Friends{% endblock %}
+{% block styles %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/friends.css') }}">
+{% endblock %}
+{% block content %}
+<div class="page-header">
+    <div>
+        <h1>Friends</h1>
+        <p class="page-description">Search for users and manage your friend list in one place.</p>
+    </div>
+</div>
+<form class="search-bar" method="GET">
+    <input type="text" name="q" value="{{ query }}" placeholder="Search by username">
+    <button type="submit">Search</button>
+</form>
+{% if query and search_results %}
+<div class="section-card">
+    <h3>Results for "{{ query }}"</h3>
+    <div class="table-card">
+        <table class="table-reset">
+            <tr><th>Username</th><th>Action</th></tr>
+            {% for u in search_results %}
+            <tr>
+                <td>{{ u.username }}</td>
+                <td>
+                    <form method="POST" action="{{ url_for('user.add_friend', friend_id=u.user_id) }}">
+                        <button type="submit">Add friend</button>
+                    </form>
+                </td>
+            </tr>
+            {% endfor %}
+        </table>
+    </div>
+</div>
+{% elif query %}
+<p>No users found for "{{ query }}".</p>
+{% endif %}
+
+<div class="section-card">
+    <h2>My Friends ({{ friends | length }})</h2>
+    {% if friends %}
+    <div class="table-card">
+        <table class="table-reset">
+            <tr><th>Username</th><th>Action</th></tr>
+            {% for f in friends %}
+            <tr>
+                <td>{{ f.username }}</td>
+                <td>
+                    <form method="POST" action="{{ url_for('user.remove_friend', friend_id=f.user_id) }}">
+                        <button type="submit">Remove</button>
+                    </form>
+                </td>
+            </tr>
+            {% endfor %}
+        </table>
+    </div>
+    {% else %}
+    <p>You have no friends yet. Search for users above.</p>
+    {% endif %}
+</div>
+{% endblock %}

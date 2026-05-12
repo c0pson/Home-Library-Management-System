@@ -1,7 +1,15 @@
-"""
-User data model.
+from dataclasses import dataclass
+from datetime import datetime
 
-Dataclass representing a single book entity.
-Fields mirror the 'books' table schema. Contains no logic.
-Used to pass structured data between layers instead of raw tuples.
-"""
+@dataclass
+class User:
+    user_id: int
+    username: str
+    password_hash: str
+
+@dataclass
+class Friend:
+    friendship_id: int
+    user_id: int
+    friend_id: int
+    since: datetime | None = None

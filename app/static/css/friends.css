@@ -1,0 +1,25 @@
+.page-header {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    gap: 16px;
+    margin-bottom: 22px;
+}
+
+.search-bar {
+    display: grid;
+    grid-template-columns: 1fr auto;
+    gap: 12px;
+    align-items: center;
+    margin-bottom: 22px;
+}
+
+.table-reset td button {
+    background: transparent;
+    color: var(--accent);
+    border: 1px solid var(--border);
+}
+
+.table-reset td button:hover {
+    background: var(--accent-soft);
+}

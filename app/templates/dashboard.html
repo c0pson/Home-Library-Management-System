@@ -1,0 +1,35 @@
+{% extends "base.html" %}
+{% block title %}Dashboard{% endblock %}
+{% block styles %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/dashboard.css') }}">
+{% endblock %}
+{% block content %}
+<div class="page-header">
+    <div>
+        <h1>Dashboard</h1>
+        <p class="page-description">A quick overview of your books, borrow activity, and messages.</p>
+    </div>
+</div>
+<div class="dashboard-grid">
+    <div class="metric-card">
+        <h3>Books in my collection</h3>
+        <div class="metric-value">{{ collection | length }}</div>
+    </div>
+    <div class="metric-card">
+        <h3>Active lendings</h3>
+        <div class="metric-value">{{ lendings | length }}</div>
+    </div>
+    <div class="metric-card">
+        <h3>Incoming requests</h3>
+        <div class="metric-value">{{ incoming | length }}</div>
+    </div>
+    <div class="metric-card">
+        <h3>Unread messages</h3>
+        <div class="metric-value">{{ unread }}</div>
+    </div>
+</div>
+<div class="action-summary">
+    <p>Explore the left panel for book actions and use the top bar for friends, inbox, and dashboard navigation.</p>
+</div>
+<a class="fab" href="{{ url_for('books.add') }}" aria-label="Add book"><span class="material-symbols-outlined">add</span></a>
+{% endblock %}

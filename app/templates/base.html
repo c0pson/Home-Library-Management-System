@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Library{% endblock %} - Home Library</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,400,0,0" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/base.css') }}">
+    {% block styles %}{% endblock %}
+</head>
+<body class="theme-light contrast-normal size-medium">
+<div class="app-shell">
+    {% if session.user_id %}
+    <aside class="sidebar">
+        <div class="brand">
+            <span class="brand-logo">L</span>
+            <div>
+                <p class="brand-title">Library Hub</p>
+            </div>
+        </div>
+
+        <div class="sidebar-group">
+            <p class="sidebar-heading">Book actions</p>
+            <nav class="sidebar-nav">
+                <a class="nav-link" href="{{ url_for('books.index') }}"><span class="material-symbols-outlined">menu_book</span>All Books</a>
+                <a class="nav-link" href="{{ url_for('books.browse') }}"><span class="material-symbols-outlined">search</span>Borrow</a>
+                <a class="nav-link" href="{{ url_for('books.collection') }}"><span class="material-symbols-outlined">inventory_2</span>My Collection</a>
+                <a class="nav-link" href="{{ url_for('lending.index') }}"><span class="material-symbols-outlined">swap_horiz</span>Lending</a>
+                <a class="nav-link" href="{{ url_for('books.add') }}"><span class="material-symbols-outlined">add_circle</span>Add Book</a>
+            </nav>
+        </div>
+
+        <div class="sidebar-footer">
+            <p class="sidebar-footer-title">Signed in as</p>
+            <p class="sidebar-user">{{ session.username }}</p>
+            <a class="sidebar-logout" href="{{ url_for('user.logout') }}"><span class="material-symbols-outlined">logout</span>Logout</a>
+        </div>
+    </aside>
+    {% endif %}
+
+    <div class="main-panel">
+        <header class="topbar">
+            <div class="topbar-left">
+                <div class="topbar-brand">
+                </div>
+                {% if session.user_id %}
+                <div class="quick-links">
+                    <a class="quick-link" href="{{ url_for('home.dashboard') }}"><span class="material-symbols-outlined">dashboard</span>Dashboard</a>
+                    <a class="quick-link" href="{{ url_for('inbox.index') }}"><span class="material-symbols-outlined">inbox</span>Inbox</a>
+                    <a class="quick-link" href="{{ url_for('user.friends') }}"><span class="material-symbols-outlined">groups</span>Friends</a>
+                </div>
+                {% endif %}
+            </div>
+            <div class="topbar-actions">
+                <button type="button" class="control-button" id="themeToggle" title="Toggle dark / light mode"><span class="material-symbols-outlined">dark_mode</span></button>
+                <button type="button" class="control-button" id="contrastToggle" title="Toggle contrast"><span class="material-symbols-outlined">contrast</span></button>
+                <button type="button" class="control-button" id="fontDecrease" title="Decrease font size"><span class="material-symbols-outlined">text_decrease</span></button>
+                <button type="button" class="control-button" id="fontIncrease" title="Increase font size"><span class="material-symbols-outlined">text_increase</span></button>
+            </div>
+        </header>
+
+        <main class="page-content">
+            {% block content %}{% endblock %}
+        </main>
+    </div>
+</div>
+
+<script>
+(function() {
+    const body = document.body;
+    function loadSetting(key, fallback) {
+        return localStorage.getItem(key) || fallback;
+    }
+    function saveSetting(key, value) {
+        localStorage.setItem(key, value);
+    }
+    function applyTheme(theme) {
+        body.classList.remove('theme-light', 'theme-dark');
+        body.classList.add(theme);
+        saveSetting('appTheme', theme);
+    }
+    function applyContrast(contrast) {
+        body.classList.remove('contrast-normal', 'contrast-high');
+        body.classList.add(contrast);
+        saveSetting('appContrast', contrast);
+    }
+    function applyFontSize(size) {
+        body.classList.remove('size-small', 'size-medium', 'size-large');
+        body.classList.add(size);
+        saveSetting('appFontSize', size);
+    }
+    const savedTheme = loadSetting('appTheme', 'theme-light');
+    const savedContrast = loadSetting('appContrast', 'contrast-normal');
+    const savedFontSize = loadSetting('appFontSize', 'size-medium');
+    applyTheme(savedTheme);
+    applyContrast(savedContrast);
+    applyFontSize(savedFontSize);
+    document.getElementById('themeToggle').addEventListener('click', function() {
+        applyTheme(body.classList.contains('theme-dark') ? 'theme-light' : 'theme-dark');
+    });
+    document.getElementById('contrastToggle').addEventListener('click', function() {
+        applyContrast(body.classList.contains('contrast-high') ? 'contrast-normal' : 'contrast-high');
+    });
+    document.getElementById('fontDecrease').addEventListener('click', function() {
+        if (body.classList.contains('size-large')) applyFontSize('size-medium');
+        else if (body.classList.contains('size-medium')) applyFontSize('size-small');
+    });
+    document.getElementById('fontIncrease').addEventListener('click', function() {
+        if (body.classList.contains('size-small')) applyFontSize('size-medium');
+        else if (body.classList.contains('size-medium')) applyFontSize('size-large');
+    });
+})();
+</script>
+{% block scripts %}{% endblock %}
+</body>
+</html>
